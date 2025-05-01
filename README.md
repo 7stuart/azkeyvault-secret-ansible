@@ -16,4 +16,5 @@ This Ansible playbook generates a random password and stores it securely in Azur
 ```bash
 python3 -m venv ~/.venvs/ansible-azure
 source ~/.venvs/ansible-azure/bin/activate
+# Install the azure collection
 ansible-galaxy collection install azure.azcollection
