@@ -1,0 +1,32 @@
+
+
+# - name: Delete a secret
+#   azure_rm_keyvaultsecret:
+#     secret_name: MySecret
+#     keyvault_uri: https://ansible-io-kv.vault.azure.net/
+#     state: absent
+
+
+# - name: Purge a delete secret
+#   azure_rm_keyvaultsecret:
+#     secret_name: MySecret
+#     keyvault_uri: https://ansible-io-kv.vault.azure.net/
+#     purge_if_need: true
+        
+- name: Generate and store a random password in Azure Key Vault
+  hosts: localhost
+  vars:
+    keyvault_uri: https://ansible-io-kv.vault.azure.net/
+  tasks:
+    - name: Generate and register password
+      ansible.builtin.shell: "openssl rand -base64 64"
+      register: new_password
+
+    - name: Create a secret in Azure Key Vault
+      azure_rm_keyvaultsecret:
+        secret_name: MySecret
+        secret_value: "{{ new_password.stdout }}"
+        keyvault_uri: "{{ keyvault_uri }}"
+        tags:
+          testing: testing
+          delete: never
